@@ -12,37 +12,49 @@
             justify-content: center;
             height: 100vh;
             margin: 0;
+            background-color: #f0f0f0;
+        }
+        video {
+            max-width: 100%;
+            height: auto;
         }
         #myButton {
-            display: none; /* Initially hide the final button */
+            display: none;
             margin-top: 20px;
             padding: 10px 20px;
             font-size: 16px;
             cursor: pointer;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
         }
         #timer {
             font-size: 24px;
             margin-top: 20px;
         }
         #overlay {
-            display: none; /* Initially hide the overlay */
+            display: none;
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 30%;
-            height: 40%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%); /* Center the overlay */
+            width: 250px; /* Match video width */
+            height: auto; /* Maintain aspect ratio */
             background: rgba(0, 0, 0, 0.7);
             align-items: center;
             justify-content: center;
+            z-index: 1000;
         }
         #overlay img {
-            width: 600px; /* Match video width */
+            width: 100%; /* Make image fill overlay */
             height: auto; /* Maintain aspect ratio */
+            object-fit: cover; /* Fill the area */
         }
         #closeButton {
             position: absolute;
-            top: 20px; /* Adjust as needed */
-            right: 20px; /* Adjust as needed */
+            top: 20px;
+            right: 20px;
             padding: 10px 20px;
             font-size: 16px;
             cursor: pointer;
@@ -61,7 +73,7 @@
 
     <div id="timer">Waiting time: 20 seconds</div>
     <div id="overlay">
-        <img src="ad1pic.jpg" alt="Overlay Image">
+        <img src="ad1pic.jpg" alt="Promotional Image">
         <button id="closeButton">X</button>
     </div>
     <button id="myButton">Collect Coin</button>
@@ -73,41 +85,36 @@
         const overlay = document.getElementById('overlay');
         const closeButton = document.getElementById('closeButton');
 
-        // Function to start the video and timer
         function startVideoAndTimer() {
             video.play().catch(error => {
-                console.log("Video playback failed: ", error);
+                console.error("Video playback failed: ", error);
+                alert("Unable to play video.");
             });
             let countdown = 20;
             timerDisplay.textContent = `Waiting time: ${countdown} seconds`;
-            button.style.display = 'none'; // Ensure the final button is hidden initially
 
             const interval = setInterval(() => {
                 countdown--;
                 timerDisplay.textContent = `Waiting time: ${countdown} seconds`;
                 if (countdown <= 0) {
                     clearInterval(interval);
-                    overlay.style.display = 'flex'; // Show overlay with image and close button
-                    timerDisplay.textContent = ''; // Clear timer text
+                    overlay.style.display = 'flex';
+                    timerDisplay.textContent = '';
                 }
-            }, 1000); // Update every second
+            }, 1000);
         }
 
-        // Automatically play video after 2 seconds
         setTimeout(startVideoAndTimer, 2000);
 
-        // Close button functionality
         closeButton.addEventListener('click', function() {
-            overlay.style.display = 'none'; // Hide overlay
-            button.style.display = 'block'; // Show final button
+            overlay.style.display = 'none';
+            button.style.display = 'block';
         });
 
-        // Button click event to redirect to the coin counter page
         button.addEventListener('click', function() {
-            // Increment the coin count and redirect
             let coins = localStorage.getItem('coins') || 0;
-            localStorage.setItem('coins', Number(coins) + 1); // Increment coin count
-            window.location.href = 'coin_counter.html'; // Redirect to coin counter page
+            localStorage.setItem('coins', Number(coins) + 1);
+            window.location.href = 'coin_counter.html';
         });
     </script>
 
