@@ -48,6 +48,14 @@
         .checkout-button:hover {
             background-color: #218838;
         }
+        .back-button {
+            display: none; /* Initially hidden */
+            margin-top: 20px;
+            background-color: #007bff;
+        }
+        .back-button:hover {
+            background-color: #0056b3;
+        }
     </style>
 </head>
 <body>
@@ -68,9 +76,12 @@
             </div>
             <button type="submit" class="checkout-button">Submit</button>
         </form>
+        <button id="back-button" class="back-button">Back to Home</button>
     </div>
 
     <script>
+        const backButton = document.getElementById('back-button');
+        
         document.getElementById('checkout-form').addEventListener('submit', function(event) {
             event.preventDefault(); // Prevent the default form submission
 
@@ -97,17 +108,23 @@
                 // Deduct 100 coins from local storage regardless of response
                 let coins = parseInt(localStorage.getItem('coins')) || 0;
                 localStorage.setItem('coins', Math.max(0, coins - 100)); // Deduct coins but don't allow negative balance
-
-                // Redirect to coin page
-                window.location.href = 'coin_counter.html';
+                
+                // Show the back button
+                backButton.style.display = 'block';
             })
             .catch(error => {
-                console.error('Error:', error);
-                // Redirect to coin page even if there's an error
+                // Deduct 100 coins even if there's an error
                 let coins = parseInt(localStorage.getItem('coins')) || 0;
                 localStorage.setItem('coins', Math.max(0, coins - 100)); // Deduct coins but don't allow negative balance
-                window.location.href = 'coin_counter.html';
+                
+                // Show the back button
+                backButton.style.display = 'block';
             });
+        });
+
+        backButton.addEventListener('click', function() {
+            // Redirect to the coin page
+            window.location.href = 'coin_counter.html';
         });
     </script>
 </body>
