@@ -67,8 +67,18 @@
 
         // Redirect to video page when "Watch and Earn" button is clicked
         document.getElementById('watchButton').addEventListener('click', function() {
-            updateCoins(1); // Increment coins by 1
-            window.location.href = 'video_page.html'; // Adjust the file name as needed
+            if (coins < 100) { // Prevents earning if GPay threshold is not met
+                updateCoins(1); // Increment coins by 1
+                this.disabled = true; // Disable the button after earning
+                setTimeout(() => {
+                    this.disabled = false; // Enable button again after some time, if you want to allow re-watching
+                }, 60000); // Allows re-clicking after 1 minute (or adjust as needed)
+            } else {
+                document.getElementById('notification').textContent = 'You have already earned your coin for this video.';
+                setTimeout(() => {
+                    document.getElementById('notification').textContent = '';
+                }, 3000);
+            }
         });
 
         // GPay button click event
