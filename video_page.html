@@ -18,8 +18,7 @@
             max-width: 100%;
             height: auto;
         }
-        #myButton {
-            display: none;
+        #myButton, #muteButton, #playButton, #pauseButton {
             margin-top: 20px;
             padding: 10px 20px;
             font-size: 16px;
@@ -71,7 +70,7 @@
 </head>
 <body>
 
-    <video id="myVideo" width="250" preload="metadata">
+    <video id="myVideo" width="250" preload="metadata" muted>
         <source src="ad1.mp4" type="video/mp4">
         Your browser does not support the video tag.
     </video>
@@ -81,29 +80,28 @@
         <img src="ad1pic.jpg" alt="Promotional Image">
         <button id="closeButton">X</button>
     </div>
-    <button id="myButton">Collect Coin</button>
+    <button id="muteButton" style="display: none;">Unmute</button>
+    <button id="playButton">Play</button>
+    <button id="pauseButton" style="display: none;">Pause</button>
+    <button id="myButton" style="display: none;">Collect Coin</button>
 
     <script>
         const video = document.getElementById('myVideo');
         const button = document.getElementById('myButton');
+        const muteButton = document.getElementById('muteButton');
         const timerDisplay = document.getElementById('timer');
         const overlay = document.getElementById('overlay');
         const closeButton = document.getElementById('closeButton');
+        const playButton = document.getElementById('playButton');
+        const pauseButton = document.getElementById('pauseButton');
 
         function startVideoAndTimer() {
-            video.play().then(() => {
-                console.log("Video is playing");
-            }).catch(error => {
-                console.error("Video playback failed: ", error);
-                alert("Unable to play video. Please ensure your browser allows autoplay.");
-            });
-
             let countdown = 20;
-            timerDisplay.textContent = Waiting time: ${countdown} seconds;
+            timerDisplay.textContent = `Waiting time: ${countdown} seconds`;
 
             const interval = setInterval(() => {
                 countdown--;
-                timerDisplay.textContent = Waiting time: ${countdown} seconds;
+                timerDisplay.textContent = `Waiting time: ${countdown} seconds`;
                 if (countdown <= 0) {
                     clearInterval(interval);
                     overlay.style.display = 'flex';
@@ -112,11 +110,14 @@
             }, 1000);
         }
 
-        setTimeout(startVideoAndTimer, 3000);
+        setTimeout(() => {
+            muteButton.style.display = 'block'; // Show unmute button after 3 seconds
+            startVideoAndTimer(); // Start the timer
+        }, 3000);
 
         closeButton.addEventListener('click', function() {
             overlay.style.display = 'none';
-            button.style.display = 'block';
+            button.style.display = 'block'; // Show collect coin button after closing overlay
         });
 
         button.addEventListener('click', function() {
@@ -124,6 +125,42 @@
             localStorage.setItem('coins', Number(coins) + 1);
             window.location.href = 'coin_counter.html';
         });
+
+        video.addEventListener('play', () => {
+            muteButton.style.display = 'block'; // Ensure unmute button is visible when video plays
+            playButton.style.display = 'none'; // Hide play button
+            pauseButton.style.display = 'block'; // Show pause button
+        });
+
+        video.addEventListener('pause', () => {
+            playButton.style.display = 'block'; // Show play button when paused
+            pauseButton.style.display = 'none'; // Hide pause button
+        });
+
+        playButton.addEventListener('click', () => {
+            video.play();
+            playButton.style.display = 'none'; // Hide play button
+            pauseButton.style.display = 'block'; // Show pause button
+        });
+
+        pauseButton.addEventListener('click', () => {
+            video.pause();
+            playButton.style.display = 'block'; // Show play button
+            pauseButton.style.display = 'none'; // Hide pause button
+        });
+
+        // Prevent seeking
+        video.addEventListener('seeked', () => {
+            video.currentTime = 0; // Reset to start or set to any specific time
+        });
+
+        muteButton.addEventListener('click', () => {
+            video.muted = !video.muted;
+            muteButton.textContent = video.muted ? 'Unmute' : 'Mute';
+        });
+
+        // Initialize mute button text
+        muteButton.textContent = video.muted ? 'Unmute' : 'Mute';
     </script>
 
 </body>
