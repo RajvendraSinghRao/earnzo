@@ -45,7 +45,7 @@
 <body>
 
     <div id="coinCounter">Coins: <span id="coinCount">0</span></div>
-    <button id="watchButton">Watch and Earn</button>
+    <button id="watchButton">Watch Video</button>
     <button id="gpayButton">GPay: Earn 1 Rupee for 100 Coins</button>
     <div id="notification"></div>
 
@@ -65,20 +65,18 @@
             }, 3000);
         }
 
-        // Redirect to video page when "Watch and Earn" button is clicked
+        // Simulate watching a video when "Watch Video" button is clicked
         document.getElementById('watchButton').addEventListener('click', function() {
-            if (coins < 100) { // Prevents earning if GPay threshold is not met
-                updateCoins(1); // Increment coins by 1
-                this.disabled = true; // Disable the button after earning
-                setTimeout(() => {
-                    this.disabled = false; // Enable button again after some time, if you want to allow re-watching
-                }, 60000); // Allows re-clicking after 1 minute (or adjust as needed)
-            } else {
-                document.getElementById('notification').textContent = 'You have already earned your coin for this video.';
-                setTimeout(() => {
-                    document.getElementById('notification').textContent = '';
-                }, 3000);
-            }
+            // Disable the button while "watching"
+            this.disabled = true;
+            document.getElementById('notification').textContent = 'Watching video...';
+
+            // Simulate video watching for 5 seconds (or use actual video logic)
+            setTimeout(() => {
+                updateCoins(1); // Award 1 coin for watching the video
+                this.disabled = false; // Re-enable the button
+                document.getElementById('notification').textContent = 'You can watch again!';
+            }, 5000); // Simulate a 5-second video
         });
 
         // GPay button click event
@@ -97,3 +95,4 @@
 
 </body>
 </html>
+
