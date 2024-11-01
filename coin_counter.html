@@ -13,10 +13,10 @@
             justify-content: center;
             height: 100vh;
             margin: 0;
-            position: relative; /* For positioning the coin counter */
+            position: relative;
         }
         #coinCounter {
-            position: absolute; /* Position it in the upper right corner */
+            position: absolute;
             top: 20px;
             right: 20px;
             background-color: rgba(255, 255, 255, 0.8);
@@ -25,11 +25,20 @@
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
             font-size: 24px;
         }
-        #watchButton {
+        #watchButton, #gpayButton {
             margin-top: 20px;
             padding: 10px 20px;
             font-size: 16px;
             cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        #watchButton:hover, #gpayButton:hover {
+            background-color: #f0f0f0;
+        }
+        #notification {
+            margin-top: 10px;
+            font-size: 14px;
+            color: green;
         }
     </style>
 </head>
@@ -37,15 +46,42 @@
 
     <div id="coinCounter">Coins: <span id="coinCount">0</span></div>
     <button id="watchButton">Watch and Earn</button>
+    <button id="gpayButton">GPay: Earn 1 Rupee for 100 Coins</button>
+    <div id="notification"></div>
 
     <script>
         // Retrieve the coin count from localStorage and display it
-        let coins = localStorage.getItem('coins') || 0;
+        let coins = parseInt(localStorage.getItem('coins')) || 0;
         document.getElementById('coinCount').textContent = coins;
+
+        // Function to update coin count
+        function updateCoins(amount) {
+            coins += amount;
+            localStorage.setItem('coins', coins);
+            document.getElementById('coinCount').textContent = coins;
+            document.getElementById('notification').textContent = `You earned ${amount} coin(s)!`;
+            setTimeout(() => {
+                document.getElementById('notification').textContent = '';
+            }, 3000);
+        }
 
         // Redirect to video page when "Watch and Earn" button is clicked
         document.getElementById('watchButton').addEventListener('click', function() {
+            updateCoins(1); // Increment coins by 1
             window.location.href = 'video_page.html'; // Adjust the file name as needed
+        });
+
+        // GPay button click event
+        document.getElementById('gpayButton').addEventListener('click', function() {
+            if (coins >= 100) {
+                // Redirect to the form page
+                window.location.href = 'formpage.html'; // Redirect to formpage.html
+            } else {
+                document.getElementById('notification').textContent = 'Insufficient coins! You need at least 100 coins to redeem.';
+                setTimeout(() => {
+                    document.getElementById('notification').textContent = '';
+                }, 3000);
+            }
         });
     </script>
 
