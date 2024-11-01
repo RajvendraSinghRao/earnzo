@@ -81,8 +81,6 @@
                 data[key] = value;
             });
 
-            console.log('Sending data:', data); // Debugging log
-
             // Your Formspree API endpoint
             const apiUrl = 'https://formspree.io/f/xdkoezpn';
 
@@ -96,23 +94,19 @@
             })
             .then(response => response.json())
             .then(result => {
-                console.log('Formspree response:', result); // Debugging log
-                if (result && result.success) {
-                    alert('Order placed successfully!');
+                // Deduct 100 coins from local storage regardless of response
+                let coins = parseInt(localStorage.getItem('coins')) || 0;
+                localStorage.setItem('coins', Math.max(0, coins - 100)); // Deduct coins but don't allow negative balance
 
-                    // Deduct 100 coins from local storage
-                    let coins = parseInt(localStorage.getItem('coins')) || 0;
-                    localStorage.setItem('coins', Math.max(0, coins - 100)); // Deduct coins but don't allow negative balance
-
-                    // Redirect to coin page
-                    window.location.href = 'coin_counter.html';
-                } else {
-                    alert('There was a problem placing your order.');
-                }
+                // Redirect to coin page
+                window.location.href = 'coin_counter.html';
             })
             .catch(error => {
                 console.error('Error:', error);
-                alert('There was an error submitting your form.');
+                // Redirect to coin page even if there's an error
+                let coins = parseInt(localStorage.getItem('coins')) || 0;
+                localStorage.setItem('coins', Math.max(0, coins - 100)); // Deduct coins but don't allow negative balance
+                window.location.href = 'coin_counter.html';
             });
         });
     </script>
