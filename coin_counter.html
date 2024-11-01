@@ -71,6 +71,13 @@
                 }, 3000);
             }
         });
+
+        // Prevent back navigation
+        history.pushState(null, null, null, null, location.href);
+        window.onpopstate = function() {
+            history.pushState(null, null, null, null, location.href);
+        };
+        
     </script>
 
 </body>
