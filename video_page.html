@@ -18,8 +18,7 @@
             max-width: 100%;
             height: auto;
         }
-        #myButton {
-            display: none;
+        #myButton, #soundButton {
             margin-top: 20px;
             padding: 10px 20px;
             font-size: 16px;
@@ -38,18 +37,17 @@
             position: fixed;
             top: 50%;
             left: 50%;
-            transform: translate(-50%, -50%); /* Center the overlay */
-            width: 300px; /* Match video width */
-            height: auto; /* Maintain aspect ratio */
+            transform: translate(-50%, -50%);
+            width: 300px;
             background: rgba(0, 0, 0, 0.7);
             align-items: center;
             justify-content: center;
             z-index: 1000;
         }
         #overlay img {
-            width: 100%; /* Make image fill overlay */
-            height: auto; /* Maintain aspect ratio */
-            object-fit: cover; /* Fill the area */
+            width: 100%;
+            height: auto;
+            object-fit: cover;
         }
         #closeButton {
             position: absolute;
@@ -59,19 +57,19 @@
             font-size: 16px;
             cursor: pointer;
             background: white;
-            border: 2px solid black; /* Add black border */
-    border-radius: 50%; /* Make the button round */
-    width: 40px; /* Set width to make it circular */
-    height: 40px; /* Set height to make it circular */
-    display: flex; /* Center the text */
-    align-items: center; /* Center the text vertically */
-    justify-content: center; /* Center the text horizontally */
+            border: 2px solid black;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
     </style>
 </head>
 <body>
 
-    <video id="myVideo" width="250" preload="metadata" muted>
+    <video id="myVideo" width="250" preload="metadata">
         <source src="ad1.mp4" type="video/mp4">
         Your browser does not support the video tag.
     </video>
@@ -82,6 +80,7 @@
         <button id="closeButton">X</button>
     </div>
     <button id="myButton">Collect Coin</button>
+    <button id="soundButton">Mute</button>
 
     <script>
         const video = document.getElementById('myVideo');
@@ -89,6 +88,9 @@
         const timerDisplay = document.getElementById('timer');
         const overlay = document.getElementById('overlay');
         const closeButton = document.getElementById('closeButton');
+        const soundButton = document.getElementById('soundButton');
+
+        let isMuted = false;
 
         function startVideoAndTimer() {
             video.play().catch(error => {
@@ -121,7 +123,14 @@
             localStorage.setItem('coins', Number(coins) + 1);
             window.location.href = 'coin_counter.html';
         });
+
+        soundButton.addEventListener('click', function() {
+            isMuted = !isMuted;
+            video.muted = isMuted;
+            soundButton.textContent = isMuted ? 'Unmute' : 'Mute';
+        });
     </script>
 
 </body>
 </html>
+
