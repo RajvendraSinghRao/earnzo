@@ -18,8 +18,7 @@
             max-width: 100%;
             height: auto;
         }
-        #myButton {
-            display: none;
+        #myButton, #muteButton {
             margin-top: 20px;
             padding: 10px 20px;
             font-size: 16px;
@@ -81,11 +80,13 @@
         <img src="ad1pic.jpg" alt="Promotional Image">
         <button id="closeButton">X</button>
     </div>
+    <button id="muteButton">Unmute</button>
     <button id="myButton">Collect Coin</button>
 
     <script>
         const video = document.getElementById('myVideo');
         const button = document.getElementById('myButton');
+        const muteButton = document.getElementById('muteButton');
         const timerDisplay = document.getElementById('timer');
         const overlay = document.getElementById('overlay');
         const closeButton = document.getElementById('closeButton');
@@ -124,6 +125,17 @@
             localStorage.setItem('coins', Number(coins) + 1);
             window.location.href = 'coin_counter.html';
         });
+
+        video.addEventListener('play', () => {
+            muteButton.style.display = 'block';
+        });
+
+        muteButton.addEventListener('click', () => {
+            video.muted = !video.muted;
+            muteButton.textContent = video.muted ? 'Unmute' : 'Mute';
+        });
+
+        muteButton.textContent = video.muted ? 'Unmute' : 'Mute';
     </script>
 
 </body>
