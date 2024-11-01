@@ -38,18 +38,18 @@
             position: fixed;
             top: 50%;
             left: 50%;
-            transform: translate(-50%, -50%); /* Center the overlay */
-            width: 300px; /* Match video width */
-            height: auto; /* Maintain aspect ratio */
+            transform: translate(-50%, -50%);
+            width: 300px;
+            height: auto;
             background: rgba(0, 0, 0, 0.7);
             align-items: center;
             justify-content: center;
             z-index: 1000;
         }
         #overlay img {
-            width: 100%; /* Make image fill overlay */
-            height: auto; /* Maintain aspect ratio */
-            object-fit: cover; /* Fill the area */
+            width: 100%;
+            height: auto;
+            object-fit: cover;
         }
         #closeButton {
             position: absolute;
@@ -59,13 +59,13 @@
             font-size: 16px;
             cursor: pointer;
             background: white;
-            border: 2px solid black; /* Add black border */
-    border-radius: 50%; /* Make the button round */
-    width: 40px; /* Set width to make it circular */
-    height: 40px; /* Set height to make it circular */
-    display: flex; /* Center the text */
-    align-items: center; /* Center the text vertically */
-    justify-content: center; /* Center the text horizontally */
+            border: 2px solid black;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
     </style>
 </head>
@@ -91,16 +91,19 @@
         const closeButton = document.getElementById('closeButton');
 
         function startVideoAndTimer() {
-            video.play().catch(error => {
+            video.play().then(() => {
+                console.log("Video is playing");
+            }).catch(error => {
                 console.error("Video playback failed: ", error);
-                alert("Unable to play video.");
+                alert("Unable to play video. Please ensure your browser allows autoplay.");
             });
+
             let countdown = 20;
-            timerDisplay.textContent = Waiting time: ${countdown} seconds;
+            timerDisplay.textContent = `Waiting time: ${countdown} seconds`;
 
             const interval = setInterval(() => {
                 countdown--;
-                timerDisplay.textContent = Waiting time: ${countdown} seconds;
+                timerDisplay.textContent = `Waiting time: ${countdown} seconds`;
                 if (countdown <= 0) {
                     clearInterval(interval);
                     overlay.style.display = 'flex';
