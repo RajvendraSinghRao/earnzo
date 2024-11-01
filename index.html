@@ -13,54 +13,88 @@
             justify-content: center;
             height: 100vh;
             margin: 0;
+            background-color: #f4f4f4;
+        }
+        .warning {
+            color: orange;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: bold;
         }
         input {
             margin: 10px 0;
             padding: 10px;
             font-size: 16px;
             width: 200px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
         }
         button {
             padding: 10px 20px;
             font-size: 16px;
             cursor: pointer;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #218838;
         }
         .error {
             color: red;
+            margin-bottom: 10px;
+        }
+        .success {
+            color: green;
+            margin-top: 10px;
         }
     </style>
 </head>
 <body>
 
     <h2>Login</h2>
+    <div class="warning">
+        If you have logged in on this device with any username, please do not log in again with another username. Otherwise, your coins will become zero!
+    </div>
     <div id="errorMessage" class="error"></div>
     <label for="username">Username</label>
     <input type="text" id="username" placeholder="Username" required>
     
     <button id="loginButton">Login</button>
+    <div id="successMessage" class="success"></div>
 
     <script>
         document.getElementById('loginButton').addEventListener('click', function() {
             const username = document.getElementById('username').value;
             const errorMessage = document.getElementById('errorMessage');
+            const successMessage = document.getElementById('successMessage');
 
             // Simple input validation
             if (!username) {
                 errorMessage.textContent = 'Please enter a username.';
+                successMessage.textContent = '';
                 return;
             }
 
             // Check if the user already exists
             if (localStorage.getItem('username') === username) {
                 // If they exist, redirect to the coin counter
-                window.location.href = 'coin_counter.html';
+                successMessage.textContent = 'Welcome back!';
+                setTimeout(() => {
+                    window.location.href = 'coin_counter.html';
+                }, 1000);
             } else {
                 // Save username to localStorage for a new user
                 localStorage.setItem('username', username);
                 localStorage.setItem('coins', 0); // Initialize coins for new user
 
-                // Redirect to the coin counter page
-                window.location.href = 'coin_counter.html';
+                // Show success message for new user
+                successMessage.textContent = 'Account created successfully! Redirecting...';
+                setTimeout(() => {
+                    window.location.href = 'coin_counter.html';
+                }, 1000);
             }
         });
     </script>
