@@ -18,7 +18,8 @@
             max-width: 100%;
             height: auto;
         }
-        #myButton, #muteButton {
+        #myButton {
+            display: none;
             margin-top: 20px;
             padding: 10px 20px;
             font-size: 16px;
@@ -70,7 +71,7 @@
 </head>
 <body>
 
-    <video id="myVideo" width="250" preload="metadata" muted>
+    <video id="myVideo" width="250" preload="metadata">
         <source src="ad1.mp4" type="video/mp4">
         Your browser does not support the video tag.
     </video>
@@ -80,13 +81,11 @@
         <img src="ad1pic.jpg" alt="Promotional Image">
         <button id="closeButton">X</button>
     </div>
-    <button id="muteButton">Unmute</button>
     <button id="myButton">Collect Coin</button>
 
     <script>
         const video = document.getElementById('myVideo');
         const button = document.getElementById('myButton');
-        const muteButton = document.getElementById('muteButton');
         const timerDisplay = document.getElementById('timer');
         const overlay = document.getElementById('overlay');
         const closeButton = document.getElementById('closeButton');
@@ -100,11 +99,11 @@
             });
 
             let countdown = 20;
-            timerDisplay.textContent = `Waiting time: ${countdown} seconds`;
+            timerDisplay.textContent = Waiting time: ${countdown} seconds;
 
             const interval = setInterval(() => {
                 countdown--;
-                timerDisplay.textContent = `Waiting time: ${countdown} seconds`;
+                timerDisplay.textContent = Waiting time: ${countdown} seconds;
                 if (countdown <= 0) {
                     clearInterval(interval);
                     overlay.style.display = 'flex';
@@ -125,17 +124,6 @@
             localStorage.setItem('coins', Number(coins) + 1);
             window.location.href = 'coin_counter.html';
         });
-
-        video.addEventListener('play', () => {
-            muteButton.style.display = 'block';
-        });
-
-        muteButton.addEventListener('click', () => {
-            video.muted = !video.muted;
-            muteButton.textContent = video.muted ? 'Unmute' : 'Mute';
-        });
-
-        muteButton.textContent = video.muted ? 'Unmute' : 'Mute';
     </script>
 
 </body>
