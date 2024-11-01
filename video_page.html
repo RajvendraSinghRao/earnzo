@@ -18,7 +18,7 @@
             max-width: 100%;
             height: auto;
         }
-        #myButton, #muteButton, #playButton, #pauseButton {
+        #myButton, #playButton, #pauseButton {
             margin-top: 20px;
             padding: 10px 20px;
             font-size: 16px;
@@ -80,7 +80,6 @@
         <img src="ad1pic.jpg" alt="Promotional Image">
         <button id="closeButton">X</button>
     </div>
-    <button id="muteButton" style="display: none;">Unmute</button>
     <button id="playButton">Play</button>
     <button id="pauseButton" style="display: none;">Pause</button>
     <button id="myButton" style="display: none;">Collect Coin</button>
@@ -88,32 +87,28 @@
     <script>
         const video = document.getElementById('myVideo');
         const button = document.getElementById('myButton');
-        const muteButton = document.getElementById('muteButton');
         const timerDisplay = document.getElementById('timer');
         const overlay = document.getElementById('overlay');
         const closeButton = document.getElementById('closeButton');
         const playButton = document.getElementById('playButton');
         const pauseButton = document.getElementById('pauseButton');
 
-        function startVideoAndTimer() {
-            let countdown = 20;
-            timerDisplay.textContent = `Waiting time: ${countdown} seconds`;
+        let countdown; // Variable to store countdown interval
 
-            const interval = setInterval(() => {
-                countdown--;
-                timerDisplay.textContent = `Waiting time: ${countdown} seconds`;
-                if (countdown <= 0) {
-                    clearInterval(interval);
+        function startTimer() {
+            let timeLeft = 20;
+            timerDisplay.textContent = `Waiting time: ${timeLeft} seconds`;
+
+            countdown = setInterval(() => {
+                timeLeft--;
+                timerDisplay.textContent = `Waiting time: ${timeLeft} seconds`;
+                if (timeLeft <= 0) {
+                    clearInterval(countdown);
                     overlay.style.display = 'flex';
                     timerDisplay.textContent = '';
                 }
             }, 1000);
         }
-
-        setTimeout(() => {
-            muteButton.style.display = 'block'; // Show unmute button after 3 seconds
-            startVideoAndTimer(); // Start the timer
-        }, 3000);
 
         closeButton.addEventListener('click', function() {
             overlay.style.display = 'none';
@@ -126,21 +121,16 @@
             window.location.href = 'coin_counter.html';
         });
 
-        video.addEventListener('play', () => {
-            muteButton.style.display = 'block'; // Ensure unmute button is visible when video plays
+        playButton.addEventListener('click', () => {
+            video.play();
             playButton.style.display = 'none'; // Hide play button
             pauseButton.style.display = 'block'; // Show pause button
+            startTimer(); // Start the timer after the video starts playing
         });
 
         video.addEventListener('pause', () => {
             playButton.style.display = 'block'; // Show play button when paused
             pauseButton.style.display = 'none'; // Hide pause button
-        });
-
-        playButton.addEventListener('click', () => {
-            video.play();
-            playButton.style.display = 'none'; // Hide play button
-            pauseButton.style.display = 'block'; // Show pause button
         });
 
         pauseButton.addEventListener('click', () => {
@@ -151,16 +141,8 @@
 
         // Prevent seeking
         video.addEventListener('seeked', () => {
-            video.currentTime = 0; // Reset to start or set to any specific time
+            video.currentTime = 0; // Reset to start
         });
-
-        muteButton.addEventListener('click', () => {
-            video.muted = !video.muted;
-            muteButton.textContent = video.muted ? 'Unmute' : 'Mute';
-        });
-
-        // Initialize mute button text
-        muteButton.textContent = video.muted ? 'Unmute' : 'Mute';
     </script>
 
 </body>
