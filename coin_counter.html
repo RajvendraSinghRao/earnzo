@@ -45,7 +45,7 @@
 <body>
 
     <div id="coinCounter">Coins: <span id="coinCount">0</span></div>
-    <button id="watchButton">Watch Video</button>
+    <button id="watchButton">Watch and Earn</button>
     <button id="gpayButton">GPay: Earn 1 Rupee for 100 Coins</button>
     <div id="notification"></div>
 
@@ -54,29 +54,9 @@
         let coins = parseInt(localStorage.getItem('coins')) || 0;
         document.getElementById('coinCount').textContent = coins;
 
-        // Function to update coin count
-        function updateCoins(amount) {
-            coins += amount;
-            localStorage.setItem('coins', coins);
-            document.getElementById('coinCount').textContent = coins;
-            document.getElementById('notification').textContent = `You earned ${amount} coin(s)!`;
-            setTimeout(() => {
-                document.getElementById('notification').textContent = '';
-            }, 3000);
-        }
-
-        // Simulate watching a video when "Watch Video" button is clicked
+        // Redirect to video page when "Watch and Earn" button is clicked
         document.getElementById('watchButton').addEventListener('click', function() {
-            // Disable the button while "watching"
-            this.disabled = true;
-            document.getElementById('notification').textContent = 'Watching video...';
-
-            // Simulate video watching for 5 seconds (or use actual video logic)
-            setTimeout(() => {
-                updateCoins(1); // Award 1 coin for watching the video
-                this.disabled = false; // Re-enable the button
-                document.getElementById('notification').textContent = 'You can watch again!';
-            }, 5000); // Simulate a 5-second video
+            window.location.href = 'video_page.html'; // Redirect to video_page.html
         });
 
         // GPay button click event
@@ -95,4 +75,3 @@
 
 </body>
 </html>
-
