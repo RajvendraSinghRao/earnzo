@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+        input {
+            margin: 10px 0;
+            padding: 10px;
+            font-size: 16px;
+            width: 200px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .error {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Login</h2>
+    <div id="errorMessage" class="error"></div>
+    <label for="username">Username</label>
+    <input type="text" id="username" placeholder="Username" required>
+    
+    <button id="loginButton">Login</button>
+
+    <script>
+        document.getElementById('loginButton').addEventListener('click', function() {
+            const username = document.getElementById('username').value;
+            const errorMessage = document.getElementById('errorMessage');
+
+            // Simple input validation
+            if (!username) {
+                errorMessage.textContent = 'Please enter a username.';
+                return;
+            }
+
+            // Check if the user already exists
+            if (localStorage.getItem('username') === username) {
+                // If they exist, redirect to the coin counter
+                window.location.href = 'coin_counter.html';
+            } else {
+                // Save username to localStorage for a new user
+                localStorage.setItem('username', username);
+                localStorage.setItem('coins', 0); // Initialize coins for new user
+
+                // Redirect to the coin counter page
+                window.location.href = 'coin_counter.html';
+            }
+        });
+    </script>
+
+</body>
+</html>

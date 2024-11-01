@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Player with Button</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+        #myButton {
+            display: none; /* Initially hide the final button */
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        #timer {
+            font-size: 24px;
+            margin-top: 20px;
+        }
+        #overlay {
+            display: none; /* Initially hide the overlay */
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            align-items: center;
+            justify-content: center;
+        }
+        #overlay img {
+            width: 600px; /* Match video width */
+            height: auto; /* Maintain aspect ratio */
+        }
+        #closeButton {
+            position: absolute;
+            top: 20px; /* Adjust as needed */
+            right: 20px; /* Adjust as needed */
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background: white;
+            border: none;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+
+    <video id="myVideo" width="600" preload="metadata" muted>
+        <source src="file:///C:/Users/Rajvendra/Videos/Captures/Autodesk%20AutoCAD%202022%20-%20[plan%20developed%20by%20me.dwg]%202024-08-12%2009-59-54.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+
+    <div id="timer">Waiting time: 20 seconds</div>
+    <div id="overlay">
+        <img src="file:///C:/Users/Rajvendra/OneDrive/Pictures/Screenshots/Screenshot%20(115).png" alt="Overlay Image">
+        <button id="closeButton">X</button>
+    </div>
+    <button id="myButton">Click Me!</button>
+
+    <script>
+        const video = document.getElementById('myVideo');
+        const button = document.getElementById('myButton');
+        const timerDisplay = document.getElementById('timer');
+        const overlay = document.getElementById('overlay');
+        const closeButton = document.getElementById('closeButton');
+
+        // Function to start the video and timer
+        function startVideoAndTimer() {
+            video.play().catch(error => {
+                console.log("Video playback failed: ", error);
+            });
+            let countdown = 20;
+            timerDisplay.textContent = `Waiting time: ${countdown} seconds`;
+            button.style.display = 'none'; // Ensure the final button is hidden initially
+
+            const interval = setInterval(() => {
+                countdown--;
+                timerDisplay.textContent = `Waiting time: ${countdown} seconds`;
+                if (countdown <= 0) {
+                    clearInterval(interval);
+                    overlay.style.display = 'flex'; // Show overlay with image and close button
+                    timerDisplay.textContent = ''; // Clear timer text
+                }
+            }, 1000); // Update every second
+        }
+
+        // Automatically play video after 3 seconds
+        setTimeout(startVideoAndTimer, 3000);
+
+        // Close button functionality
+        closeButton.addEventListener('click', function() {
+            overlay.style.display = 'none'; // Hide overlay
+            button.style.display = 'block'; // Show final button
+        });
+
+        // Button click event to redirect to the coin counter page
+        button.addEventListener('click', function() {
+            // Increment the coin count and redirect
+            let coins = localStorage.getItem('coins') || 0;
+            localStorage.setItem('coins', Number(coins) + 1); // Increment coin count
+            window.location.href = 'coin_counter.html'; // Redirect to coin counter page
+        });
+    </script>
+
+</body>
+</html>
