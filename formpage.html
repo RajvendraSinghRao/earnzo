@@ -81,6 +81,8 @@
                 data[key] = value;
             });
 
+            console.log('Sending data:', data); // Debugging log
+
             // Your Formspree API endpoint
             const apiUrl = 'https://formspree.io/f/xdkoezpn';
 
@@ -94,7 +96,8 @@
             })
             .then(response => response.json())
             .then(result => {
-                if (result.success) {
+                console.log('Formspree response:', result); // Debugging log
+                if (result && result.success) {
                     alert('Order placed successfully!');
 
                     // Deduct 100 coins from local storage
