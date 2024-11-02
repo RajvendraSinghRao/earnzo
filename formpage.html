@@ -9,17 +9,17 @@
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background-image: url('coin_page_background.avif'); /* Update this path */
+            background-image: url('coin_page_background.avif');
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
-            min-height: 100vh; /* Ensure it covers the full viewport height */
+            min-height: 100vh;
         }
         .container {
             width: 80%;
             max-width: 800px;
             margin: 20px auto;
-            background: rgba(255, 255, 255, 0.9); /* Semi-transparent background */
+            background: rgba(255, 255, 255, 0.9);
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0,0,0,0.1);
@@ -53,7 +53,7 @@
             background-color: #218838;
         }
         .back-button {
-            display: none; /* Initially hidden */
+            display: none;
             color: white;
             margin-top: 20px;
             border-radius: 4px;
@@ -62,6 +62,19 @@
         }
         .back-button:hover {
             background-color: #218838;
+        }
+        .loader {
+            display: none;
+            margin-top: 20px;
+        }
+        .notification {
+            display: none;
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+            border-radius: 4px;
         }
     </style>
 </head>
@@ -75,7 +88,7 @@
             </div>
             <div class="form-group">
                 <label for="phone-number">Phone Number</label>
-                <input type="text" id="phone-number" name="phone-number" required>
+                <input type="text" id="phone-number" name="phone-number" required pattern="\d{10}">
             </div>
             <div class="form-group">
                 <label for="upi-id">UPI ID</label>
@@ -83,26 +96,28 @@
             </div>
             <button type="submit" class="checkout-button">Submit</button>
         </form>
+        <div class="loader" id="loader">Loading...</div>
+        <div class="notification" id="notification">Your withdrawal is completed successfully! Press "Back to Home" to receive money in your UPI ID.</div>
         <button id="back-button" class="back-button">Back to Home</button>
     </div>
 
     <script>
         const backButton = document.getElementById('back-button');
-        
-        document.getElementById('checkout-form').addEventListener('submit', function(event) {
-            event.preventDefault(); // Prevent the default form submission
+        const loader = document.getElementById('loader');
+        const notification = document.getElementById('notification');
 
-            // Collect form data
+        document.getElementById('checkout-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            loader.style.display = 'block'; // Show loader
+
             const formData = new FormData(this);
             const data = {};
             formData.forEach((value, key) => {
                 data[key] = value;
             });
 
-            // Your Formspree API endpoint
             const apiUrl = 'https://formspree.io/f/xdkoezpn';
 
-            // Send data to Formspree API
             fetch(apiUrl, {
                 method: 'POST',
                 headers: {
@@ -112,25 +127,28 @@
             })
             .then(response => response.json())
             .then(result => {
-                // Deduct 100 coins from local storage regardless of response
-                let coins = parseInt(localStorage.getItem('coins')) || 0;
-                localStorage.setItem('coins', Math.max(0, coins - 100)); // Deduct coins but don't allow negative balance
-                
-                // Show the back button
-                backButton.style.display = 'block';
+                // Handle success response here
+                updateCoins();
+                notification.style.display = 'block'; // Show notification
+                backButton.style.display = 'block'; // Show back button
             })
             .catch(error => {
-                // Deduct 100 coins even if there's an error
-                let coins = parseInt(localStorage.getItem('coins')) || 0;
-                localStorage.setItem('coins', Math.max(0, coins - 100)); // Deduct coins but don't allow negative balance
-                
-                // Show the back button
-                backButton.style.display = 'block';
+                // Handle error here
+                alert('There was an error submitting the form.');
+                updateCoins();
+                backButton.style.display = 'block'; // Show back button
+            })
+            .finally(() => {
+                loader.style.display = 'none'; // Hide loader
             });
         });
 
+        function updateCoins() {
+            let coins = parseInt(localStorage.getItem('coins')) || 0;
+            localStorage.setItem('coins', Math.max(0, coins - 100));
+        }
+
         backButton.addEventListener('click', function() {
-            // Redirect to the coin page
             window.location.href = 'coin_counter.html';
         });
     </script>
