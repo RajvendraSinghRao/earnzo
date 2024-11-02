@@ -28,6 +28,14 @@
             border-radius: 5px;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
             font-size: 24px;
+            display: flex; /* Use flexbox to align items */
+            align-items: center; /* Center vertically */
+        }
+        #coinImage {
+            width: 24px; /* Set a width for the image */
+            height: auto; /* Maintain aspect ratio */
+            margin-right: 8px; /* Space between image and text */
+            vertical-align: middle; /* Aligns the image with the text */
         }
         #watchButton, #gpayButton {
             width: 300px; /* Set a fixed width for both buttons */
@@ -54,7 +62,10 @@
 </head>
 <body>
 
-    <div id="coinCounter">Coins: <span id="coinCount">0</span></div>
+    <div id="coinCounter">
+        <img src="coin_pic.png" alt="Coin" id="coinImage" />
+        Coins: <span id="coinCount">0</span>
+    </div>
     <button id="watchButton" aria-label="Watch and Earn">Watch and Earn</button>
     <button id="gpayButton" aria-label="GPay: 100 Coins = 2 Rupees">GPay: 100 Coins = 2 Rupees</button>
     <div id="notification"></div>
