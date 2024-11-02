@@ -70,7 +70,7 @@
 </head>
 <body>
 
-    <video id="myVideo" width="250" preload="metadata">
+    <video id="myVideo" width="250" preload="metadata" controls>
         <source src="ad1.mp4" type="video/mp4">
         Your browser does not support the video tag.
     </video>
@@ -78,10 +78,10 @@
     <div id="timer">Waiting time: 20 seconds</div>
     <div id="overlay">
         <img src="ad1pic.jpg" alt="Promotional Image">
-        <button id="closeButton">X</button>
+        <button id="closeButton" aria-label="Close overlay">X</button>
     </div>
     <button id="myButton" style="display: none;">Collect Coin</button>
-    <button id="playButton">Play</button>
+    <button id="playButton" aria-label="Play video">Play</button>
 
     <script>
         const video = document.getElementById('myVideo');
@@ -116,13 +116,15 @@
         button.addEventListener('click', function() {
             let coins = localStorage.getItem('coins') || 0;
             localStorage.setItem('coins', Number(coins) + 1);
+            alert("Coin collected! Total coins: " + (Number(coins) + 1));
+            button.style.display = 'none'; // Hide collect coin button after it is clicked
             window.location.href = 'coin_counter.html';
         });
 
         playButton.addEventListener('click', () => {
             video.play();
             playButton.style.display = 'none'; // Hide play button
-            startTimer(); // Start the timer after the video starts playing
+            setTimeout(startTimer, 1000); // Start timer after a delay
         });
 
         // Prevent seeking
@@ -139,3 +141,4 @@
 
 </body>
 </html>
+
