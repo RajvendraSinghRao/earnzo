@@ -14,15 +14,19 @@
             height: 100vh;
             margin: 0;
             position: relative;
+            background-image: url('coin_page_background.avif');
+            background-size: cover; /* Ensures the image covers the entire area */
+            background-position: center; /* Centers the image */
+            color: white; /* Optional: Changes text color for better contrast */
         }
         #coinCounter {
             position: absolute;
             top: 20px;
             right: 20px;
-            background-color: rgba(255, 255, 255, 0.8);
+            background-color: rgba(0, 0, 0, 0.7); /* Darker background for better readability */
             padding: 10px;
             border-radius: 5px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
             font-size: 24px;
         }
         #watchButton, #gpayButton {
@@ -31,6 +35,9 @@
             font-size: 16px;
             cursor: pointer;
             transition: background-color 0.3s;
+            background-color: rgba(255, 255, 255, 0.8); /* Light background for buttons */
+            border: none; /* Remove default button border */
+            border-radius: 5px; /* Round button corners */
         }
         #watchButton:hover, #gpayButton:hover {
             background-color: #f0f0f0;
@@ -45,8 +52,8 @@
 <body>
 
     <div id="coinCounter">Coins: <span id="coinCount">0</span></div>
-    <button id="watchButton">Watch and Earn</button>
-    <button id="gpayButton">GPay: 100 Coins = 2 Rupees</button>
+    <button id="watchButton" aria-label="Watch and Earn">Watch and Earn</button>
+    <button id="gpayButton" aria-label="GPay: 100 Coins = 2 Rupees">GPay: 100 Coins = 2 Rupees</button>
     <div id="notification"></div>
 
     <script>
@@ -56,48 +63,39 @@
 
         // Function to determine which video page to open
         function getNextVideoPage() {
-            // Retrieve the last opened video index from localStorage
             let lastVideoIndex = parseInt(localStorage.getItem('lastVideoIndex')) || 0;
-
-            // Define the video pages in an array
-            const videoPages = [
-                'video_page1.html', 
-                'video_page2.html', 
-                'video_page3.html'
-            ];
-
-            // Calculate the next video index
+            const videoPages = ['video_page1.html', 'video_page2.html', 'video_page3.html'];
             let nextVideoIndex = (lastVideoIndex + 1) % videoPages.length;
-
-            // Update localStorage with the new index
             localStorage.setItem('lastVideoIndex', nextVideoIndex);
-
-            return videoPages[nextVideoIndex]; // Return the next video page
+            return videoPages[nextVideoIndex];
         }
 
         // Redirect to video page when "Watch and Earn" button is clicked
         document.getElementById('watchButton').addEventListener('click', function() {
             const nextVideoPage = getNextVideoPage();
-            window.location.href = nextVideoPage; // Redirect to the next video page
+            window.location.href = nextVideoPage;
         });
 
         // GPay button click event
         document.getElementById('gpayButton').addEventListener('click', function() {
             if (coins >= 100) {
-                // Redirect to the form page
                 window.location.href = 'formpage.html'; // Redirect to formpage.html
             } else {
-                document.getElementById('notification').textContent = 'Insufficient coins! You need at least 100 coins to redeem.';
-                setTimeout(() => {
-                    document.getElementById('notification').textContent = '';
-                }, 3000);
+                showNotification('Insufficient coins! You need at least 100 coins to redeem.');
             }
         });
 
+        function showNotification(message) {
+            document.getElementById('notification').textContent = message;
+            setTimeout(() => {
+                document.getElementById('notification').textContent = '';
+            }, 3000);
+        }
+
         // Prevent back navigation
-        history.pushState(null, null, null, null, location.href);
+        history.pushState(null, null, null);
         window.onpopstate = function() {
-            history.pushState(null, null, null, null, location.href);
+            history.pushState(null, null, null);
         };
     </script>
 
