@@ -54,9 +54,32 @@
         let coins = parseInt(localStorage.getItem('coins')) || 0;
         document.getElementById('coinCount').textContent = coins;
 
+        // Function to determine which video page to open
+        function getNextVideoPage() {
+            // Retrieve the last opened video index from localStorage
+            let lastVideoIndex = parseInt(localStorage.getItem('lastVideoIndex')) || 0;
+
+            // Define the video pages in an array
+            const videoPages = [
+                'video_page1.html', 
+                'video_page2.html', 
+                'video_page3.html', 
+                'video_page4.html'
+            ];
+
+            // Calculate the next video index
+            let nextVideoIndex = (lastVideoIndex + 1) % videoPages.length;
+
+            // Update localStorage with the new index
+            localStorage.setItem('lastVideoIndex', nextVideoIndex);
+
+            return videoPages[nextVideoIndex]; // Return the next video page
+        }
+
         // Redirect to video page when "Watch and Earn" button is clicked
         document.getElementById('watchButton').addEventListener('click', function() {
-            window.location.href = 'video_page.html'; // Redirect to video_page.html
+            const nextVideoPage = getNextVideoPage();
+            window.location.href = nextVideoPage; // Redirect to the next video page
         });
 
         // GPay button click event
@@ -77,7 +100,6 @@
         window.onpopstate = function() {
             history.pushState(null, null, null, null, location.href);
         };
-        
     </script>
 
 </body>
