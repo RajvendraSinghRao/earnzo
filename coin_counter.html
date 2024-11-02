@@ -48,10 +48,18 @@
             color: white; /* White text for contrast */
             border: none; /* Remove default button border */
             border-radius: 5px; /* Round button corners */
+            display: flex; /* Use flexbox to align image and text */
+            align-items: center; /* Center vertically */
         }
         #watchButton:hover, #gpayButton:hover {
             background-color: rgba(75, 0, 130, 0.9); /* A deeper purple on hover */
             color: #fff; /* Keep the text white */
+        }
+        #gpayImage {
+            width: 16px; /* Set a width for the image */
+            height: auto; /* Maintain aspect ratio */
+            margin-right: 8px; /* Space between image and text */
+            vertical-align: middle; /* Aligns the image with the text */
         }
         #notification {
             margin-top: 10px;
@@ -67,7 +75,10 @@
         Coins: <span id="coinCount">0</span>
     </div>
     <button id="watchButton" aria-label="Watch and Earn">Watch and Earn</button>
-    <button id="gpayButton" aria-label="GPay: 100 Coins = 2 Rupees">GPay: 100 Coins = 2 Rupees</button>
+    <button id="gpayButton" aria-label="GPay: 100 Coins = 2 Rupees">
+        <img src="gpay_pic.png" alt="GPay" id="gpayImage" />
+        GPay: 100 Coins = 2 Rupees
+    </button>
     <div id="notification"></div>
 
     <script>
