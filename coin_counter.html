@@ -107,7 +107,7 @@
 
             // Check if 2 minute (120000 ms) has passed
             if (currentTime - lastYouTubeClick < 60000) {
-                showNotification('You need to wait for 1 minute before watching another video.');
+                showNotification('You need to wait for 2 minute before watching another video.');
             } else {
                 // Update the last click time and redirect to YouTube page
                 localStorage.setItem('lastYouTubeClick', currentTime);
