@@ -3,33 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>YouTube Video</title>
+    <title>YouTube Video with Coin Collect</title>
     <style>
         body {
             background-image: url('coin_page_background.avif');
-            background-size: cover; /* Makes the image cover the entire background */
-            background-position: center; /* Centers the image */
-            background-repeat: no-repeat; /* Prevents the image from repeating */
-            background-attachment: fixed; /* Fixes the background image */
-            height: 100vh; /* Sets height to full viewport height */
-            margin: 0; /* Removes default margin */
-            color: white; /* Change text color to white for better visibility */
-            font-family: Arial, sans-serif; /* Sets a font for the text */
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            height: 100vh;
+            margin: 0;
+            color: white;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
         }
         h1 {
-            text-align: center;
-            margin-top: 20px; /* Adds some space above the heading */
+            margin-bottom: 20px;
         }
         .video-container {
-            display: flex; /* Center the video container */
-            justify-content: center; /* Center horizontally */
-            align-items: center; /* Center vertically */
-            height: 80%; /* Adjust height as needed */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
         }
-        .video-container iframe {
-            width: 300px; /* Set width of the video */
-            height: 169px; /* Set height based on aspect ratio */
+        .coin-button {
+            display: none; /* Initially hidden */
+            padding: 10px 20px;
+            background-color: gold;
             border: none;
+            color: black;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .counter {
+            margin-top: 10px;
+            font-size: 20px;
         }
     </style>
 </head>
@@ -37,10 +48,67 @@
     <h1>Watch This Video</h1>
     <div class="video-container">
         <iframe 
-            src="https://www.youtube.com/embed/oTTHO6mC9h4?controls=1" 
+            id="video" 
+            src="https://www.youtube.com/embed/oTTHO6mC9h4?controls=1&enablejsapi=1" 
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
             allowfullscreen>
         </iframe>
     </div>
+    <div class="counter">Time: <span id="time">0</span> seconds</div>
+    <button class="coin-button" id="collectButton">Collect Coins</button>
+
+    <script>
+        const video = document.getElementById('video');
+        const timeDisplay = document.getElementById('time');
+        const collectButton = document.getElementById('collectButton');
+        let timeCounter = 0;
+        let interval;
+
+        // Load the YouTube IFrame Player API code asynchronously.
+        const tag = document.createElement('script');
+        tag.src = "https://www.youtube.com/iframe_api";
+        const firstScriptTag = document.getElementsByTagName('script')[0];
+        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+        let player;
+        function onYouTubeIframeAPIReady() {
+            player = new YT.Player('video', {
+                events: {
+                    'onStateChange': onPlayerStateChange
+                }
+            });
+        }
+
+        function onPlayerStateChange(event) {
+            if (event.data === YT.PlayerState.PLAYING) {
+                startCounter();
+            } else {
+                stopCounter();
+            }
+        }
+
+        function startCounter() {
+            if (!interval) {
+                interval = setInterval(() => {
+                    timeCounter++;
+                    timeDisplay.textContent = timeCounter;
+                    if (timeCounter >= 40) {
+                        collectButton.style.display = 'block';
+                    }
+                }, 1000); // Update every second
+            }
+        }
+
+        function stopCounter() {
+            clearInterval(interval);
+            interval = null;
+        }
+
+        collectButton.addEventListener('click', () => {
+            // Redirect to coin_counter.html and simulate collecting coins
+            alert('You collected 2 coins!');
+            window.location.href = 'coin_counter.html'; // Redirect
+        });
+    </script>
 </body>
 </html>
