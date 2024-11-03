@@ -51,11 +51,11 @@
 
     <script>
         let player;
-        let countdown;
-        let totalTime = 40; // Total time for coins
         let elapsedTime = 0; // Track elapsed time
+        const totalTime = 40; // Total time for coins
         const timerDisplay = document.getElementById('timer');
         const button = document.getElementById('myButton');
+        let timerInterval; // Store the interval ID
         let isPlaying = false; // Track whether the video is playing
 
         function onYouTubeIframeAPIReady() {
@@ -70,10 +70,10 @@
         }
 
         function onPlayerStateChange(event) {
-            if (event.data == YT.PlayerState.PLAYING) {
+            if (event.data === YT.PlayerState.PLAYING) {
                 isPlaying = true; // Set playing flag
                 startTimer();
-            } else if (event.data == YT.PlayerState.PAUSED || event.data == YT.PlayerState.ENDED) {
+            } else if (event.data === YT.PlayerState.PAUSED || event.data === YT.PlayerState.ENDED) {
                 isPlaying = false; // Clear playing flag
                 pauseTimer();
             }
@@ -81,12 +81,13 @@
 
         function startTimer() {
             timerDisplay.textContent = `Waiting time: ${totalTime - elapsedTime} seconds`;
-            countdown = setInterval(() => {
+            if (timerInterval) clearInterval(timerInterval); // Clear any existing interval
+            timerInterval = setInterval(() => {
                 if (isPlaying && elapsedTime < totalTime) {
                     elapsedTime++;
                     timerDisplay.textContent = `Waiting time: ${totalTime - elapsedTime} seconds`;
                     if (elapsedTime >= totalTime) {
-                        clearInterval(countdown);
+                        clearInterval(timerInterval);
                         button.style.display = 'block'; // Show collect coin button
                     }
                 }
@@ -94,11 +95,11 @@
         }
 
         function pauseTimer() {
-            clearInterval(countdown); // Stop the timer
+            clearInterval(timerInterval); // Stop the timer
         }
 
         function resetTimer() {
-            clearInterval(countdown);
+            pauseTimer(); // Ensure timer is stopped
             elapsedTime = 0; // Reset elapsed time
             timerDisplay.textContent = `Waiting time: ${totalTime} seconds`;
             button.style.display = 'none'; // Hide collect coin button
