@@ -105,7 +105,7 @@
             const lastYouTubeClick = parseInt(localStorage.getItem('lastYouTubeClick')) || 0;
             const currentTime = Date.now();
 
-            // Check if 1 minute (60000 ms) has passed
+            // Check if 2 minute (120000 ms) has passed
             if (currentTime - lastYouTubeClick < 60000) {
                 showNotification('You need to wait for 1 minute before watching another video.');
             } else {
