@@ -13,8 +13,8 @@
             height: 100vh;
             margin: 0;
             background-image: url('coin_page_background.avif');
-            background-size: cover; /* Cover the entire screen */
-            background-position: center; /* Center the image */
+            background-size: cover;
+            background-position: center;
             color: white;
         }
         #timer {
@@ -26,14 +26,20 @@
             padding: 10px 20px;
             font-size: 16px;
             cursor: pointer;
-            background-color: rgba(76, 175, 80, 0.8); /* Slightly transparent green */
+            background-color: rgba(76, 175, 80, 0.8);
             color: white;
             border: none;
             border-radius: 5px;
-            display: none; /* Initially hidden */
+            display: none;
         }
         #myButton:hover {
             background-color: rgba(76, 175, 80, 1);
+        }
+        @media (max-width: 600px) {
+            #player {
+                width: 90%;
+                height: auto;
+            }
         }
     </style>
 </head>
@@ -50,6 +56,7 @@
         let elapsedTime = 0; // Track elapsed time
         const timerDisplay = document.getElementById('timer');
         const button = document.getElementById('myButton');
+        let isPlaying = false; // Track whether the video is playing
 
         function onYouTubeIframeAPIReady() {
             player = new YT.Player('player', {
@@ -64,18 +71,18 @@
 
         function onPlayerStateChange(event) {
             if (event.data == YT.PlayerState.PLAYING) {
+                isPlaying = true; // Set playing flag
                 startTimer();
-            } else if (event.data == YT.PlayerState.PAUSED) {
+            } else if (event.data == YT.PlayerState.PAUSED || event.data == YT.PlayerState.ENDED) {
+                isPlaying = false; // Clear playing flag
                 pauseTimer();
-            } else if (event.data == YT.PlayerState.ENDED) {
-                resetTimer();
             }
         }
 
         function startTimer() {
             timerDisplay.textContent = `Waiting time: ${totalTime - elapsedTime} seconds`;
             countdown = setInterval(() => {
-                if (elapsedTime < totalTime) {
+                if (isPlaying && elapsedTime < totalTime) {
                     elapsedTime++;
                     timerDisplay.textContent = `Waiting time: ${totalTime - elapsedTime} seconds`;
                     if (elapsedTime >= totalTime) {
@@ -87,11 +94,11 @@
         }
 
         function pauseTimer() {
-            clearInterval(countdown); // Stop the timer, but don't reset elapsedTime
+            clearInterval(countdown); // Stop the timer
         }
 
         function resetTimer() {
-            clearInterval(countdown); // Reset the timer
+            clearInterval(countdown);
             elapsedTime = 0; // Reset elapsed time
             timerDisplay.textContent = `Waiting time: ${totalTime} seconds`;
             button.style.display = 'none'; // Hide collect coin button
@@ -102,7 +109,8 @@
             coins += 2; // Give 2 coins
             localStorage.setItem('coins', coins);
             alert(`Coins collected! Total coins: ${coins}`);
-            button.style.display = 'none'; // Hide collect coin button after clicked
+            button.disabled = true; // Disable button after click
+            button.style.display = 'none'; // Hide collect coin button
             resetTimer(); // Reset timer
             window.location.href = 'coin_counter.html'; // Redirect to coin_counter.html
         });
