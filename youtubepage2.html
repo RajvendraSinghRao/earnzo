@@ -107,7 +107,7 @@
 
         button.addEventListener('click', function() {
             let coins = Number(localStorage.getItem('coins')) || 0;
-            coins += 2; // Give 2 coins
+            coins += 10; // Give 2 coins
             localStorage.setItem('coins', coins);
             alert(`Coins collected! Total coins: ${coins}`);
             button.disabled = true; // Disable button after click
