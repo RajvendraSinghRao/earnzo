@@ -1,69 +1,118 @@
-let player;
-let countdown;
-let totalTime = 40; // Total time for coins
-let elapsedTime = 0; // Track elapsed time
-const timerDisplay = document.getElementById('timer');
-const button = document.getElementById('myButton');
-
-function onYouTubeIframeAPIReady() {
-    player = new YT.Player('player', {
-        height: '360',
-        width: '350',
-        videoId: '9eUS30lGlKA',
-        events: {
-            'onStateChange': onPlayerStateChange
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube Video Player with Coin Collection</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background-image: url('coin_page_background.avif');
+            background-size: cover; /* Cover the entire screen */
+            background-position: center; /* Center the image */
+            color: white;
         }
-    });
-}
+        #timer {
+            font-size: 24px;
+            margin-top: 20px;
+        }
+        #myButton {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: rgba(76, 175, 80, 0.8); /* Slightly transparent green */
+            color: white;
+            border: none;
+            border-radius: 5px;
+            display: none; /* Initially hidden */
+        }
+        #myButton:hover {
+            background-color: rgba(76, 175, 80, 1);
+        }
+    </style>
+</head>
+<body>
 
-function onPlayerStateChange(event) {
-    if (event.data == YT.PlayerState.PLAYING) {
-        startTimer();
-    } else if (event.data == YT.PlayerState.PAUSED) {
-        pauseTimer();
-    } else if (event.data == YT.PlayerState.ENDED) {
-        resetTimer();
-    }
-}
+    <div id="player"></div>
+    <div id="timer">Waiting time: 40 seconds</div>
+    <button id="myButton" aria-label="Collect Coin" title="Collect Coin">Collect Coin</button>
 
-function startTimer() {
-    // Start counting from the elapsed time, do not reset it
-    timerDisplay.textContent = `Waiting time: ${totalTime - elapsedTime} seconds`;
-    countdown = setInterval(() => {
-        if (elapsedTime < totalTime) {
-            elapsedTime++;
-            timerDisplay.textContent = `Waiting time: ${totalTime - elapsedTime} seconds`;
-            if (elapsedTime >= totalTime) {
-                clearInterval(countdown);
-                button.style.display = 'block'; // Show collect coin button
+    <script>
+        let player;
+        let countdown;
+        let totalTime = 40; // Total time for coins
+        let elapsedTime = 0; // Track elapsed time
+        const timerDisplay = document.getElementById('timer');
+        const button = document.getElementById('myButton');
+
+        function onYouTubeIframeAPIReady() {
+            player = new YT.Player('player', {
+                height: '360',
+                width: '350',
+                videoId: '9eUS30lGlKA',
+                events: {
+                    'onStateChange': onPlayerStateChange
+                }
+            });
+        }
+
+        function onPlayerStateChange(event) {
+            if (event.data == YT.PlayerState.PLAYING) {
+                startTimer();
+            } else if (event.data == YT.PlayerState.PAUSED) {
+                pauseTimer();
+            } else if (event.data == YT.PlayerState.ENDED) {
+                resetTimer();
             }
         }
-    }, 1000);
-}
 
-function pauseTimer() {
-    clearInterval(countdown); // Stop the timer, but don't reset elapsedTime
-}
+        function startTimer() {
+            timerDisplay.textContent = `Waiting time: ${totalTime - elapsedTime} seconds`;
+            countdown = setInterval(() => {
+                if (elapsedTime < totalTime) {
+                    elapsedTime++;
+                    timerDisplay.textContent = `Waiting time: ${totalTime - elapsedTime} seconds`;
+                    if (elapsedTime >= totalTime) {
+                        clearInterval(countdown);
+                        button.style.display = 'block'; // Show collect coin button
+                    }
+                }
+            }, 1000);
+        }
 
-function resetTimer() {
-    clearInterval(countdown); // Reset the timer
-    elapsedTime = 0; // Reset elapsed time
-    timerDisplay.textContent = `Waiting time: ${totalTime} seconds`;
-    button.style.display = 'none'; // Hide collect coin button
-}
+        function pauseTimer() {
+            clearInterval(countdown); // Stop the timer, but don't reset elapsedTime
+        }
 
-button.addEventListener('click', function() {
-    let coins = Number(localStorage.getItem('coins')) || 0;
-    coins += 2; // Give 2 coins
-    localStorage.setItem('coins', coins);
-    alert(`Coins collected! Total coins: ${coins}`);
-    button.style.display = 'none'; // Hide collect coin button after clicked
-    resetTimer(); // Reset timer
-    window.location.href = 'coin_counter.html'; // Redirect to coin_counter.html
-});
+        function resetTimer() {
+            clearInterval(countdown); // Reset the timer
+            elapsedTime = 0; // Reset elapsed time
+            timerDisplay.textContent = `Waiting time: ${totalTime} seconds`;
+            button.style.display = 'none'; // Hide collect coin button
+        }
 
-// Load the IFrame Player API code asynchronously
-const tag = document.createElement('script');
-tag.src = "https://www.youtube.com/iframe_api";
-const firstScriptTag = document.getElementsByTagName('script')[0];
-firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+        button.addEventListener('click', function() {
+            let coins = Number(localStorage.getItem('coins')) || 0;
+            coins += 2; // Give 2 coins
+            localStorage.setItem('coins', coins);
+            alert(`Coins collected! Total coins: ${coins}`);
+            button.style.display = 'none'; // Hide collect coin button after clicked
+            resetTimer(); // Reset timer
+            window.location.href = 'coin_counter.html'; // Redirect to coin_counter.html
+        });
+
+        // Load the IFrame Player API code asynchronously
+        const tag = document.createElement('script');
+        tag.src = "https://www.youtube.com/iframe_api";
+        const firstScriptTag = document.getElementsByTagName('script')[0];
+        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+    </script>
+
+</body>
+</html>
