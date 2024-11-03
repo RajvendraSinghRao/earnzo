@@ -37,7 +37,7 @@
             margin-right: 8px; /* Space between image and text */
             vertical-align: middle; /* Aligns the image with the text */
         }
-        #watchButton, #gpayButton {
+        #watchButton, #youtubeButton, #gpayButton {
             width: 300px; /* Set a fixed width for both buttons */
             margin-top: 30px;
             padding: 20px 20px;
@@ -50,7 +50,7 @@
             border-radius: 5px; /* Round button corners */
             vertical-align: middle; /* Align button text and images */
         }
-        #watchButton:hover, #gpayButton:hover {
+        #watchButton:hover, #youtubeButton:hover, #gpayButton:hover {
             background-color: rgba(75, 0, 130, 0.9); /* A deeper purple on hover */
             color: #fff; /* Keep the text white */
         }
@@ -74,11 +74,15 @@
         Coins: <span id="coinCount">0</span>
     </div>
     <button id="watchButton" aria-label="Watch and Earn">Watch and Earn</button>
+
+    <!-- New YouTube button added here -->
+    <button id="youtubeButton" aria-label="Watch YouTube and Earn">Watch YouTube and Earn</button>
+
     <button id="gpayButton" aria-label="GPay: 100 Coins = 2 Rupees">
         <img src="gpay_pic.png" alt="GPay" id="gpayImage" />
         GPay: 100 Coins = 2 Rupees
     </button>
-    <div id="notification"></div>
+    <div id="notification" aria-live="polite"></div>
 
     <script>
         // Retrieve the coin count from localStorage and display it
@@ -98,6 +102,11 @@
         document.getElementById('watchButton').addEventListener('click', function() {
             const nextVideoPage = getNextVideoPage();
             window.location.href = nextVideoPage;
+        });
+
+        // YouTube button click event
+        document.getElementById('youtubeButton').addEventListener('click', function() {
+            window.location.href = 'youtubepage.html';
         });
 
         // GPay button click event
@@ -125,3 +134,4 @@
 
 </body>
 </html>
+
