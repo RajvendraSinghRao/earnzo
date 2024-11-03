@@ -9,6 +9,10 @@
             background-image: url('coin_page_background.avif');
             background-size: cover; /* Makes the image cover the entire background */
             background-position: center; /* Centers the image */
+            background-repeat: no-repeat; /* Prevents the image from repeating */
+            background-attachment: fixed; /* Fixes the background image */
+            height: 100vh; /* Sets height to full viewport height */
+            margin: 0; /* Removes default margin */
             color: white; /* Change text color to white for better visibility */
             font-family: Arial, sans-serif; /* Sets a font for the text */
         }
@@ -16,19 +20,27 @@
             text-align: center;
             margin-top: 20px; /* Adds some space above the heading */
         }
-        iframe {
-            display: block;
-            margin: 0 auto; /* Centers the iframe */
-            border: none; /* Removes the border */
+        .video-container {
+            position: relative;
+            width: 100%;
+            padding-bottom: 56.25%; /* 16:9 aspect ratio */
+            height: 0;
+            overflow: hidden;
+        }
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
         }
     </style>
 </head>
 <body>
     <h1>Watch This Video</h1>
-    <iframe width="560" height="315" 
-            src="https://www.youtube.com/embed/VIDEO_ID" 
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-            allowfullscreen>
-    </iframe>
+    <div class="video-container">
+        <iframe src="https://www.youtube.com/embed/https://youtu.be/oTTHO6mC9h4?si=NYW41vCTqxER0sXY" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    </div>
 </body>
 </html>
