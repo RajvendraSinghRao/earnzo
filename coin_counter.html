@@ -97,7 +97,7 @@
         // Redirect to video page when "Watch and Earn" button is clicked
         document.getElementById('watchButton').addEventListener('click', function() {
             const nextVideoPage = getNextVideoPage();
-            coins += 0; // Increment coins by 10 for watching
+            coins += 10; // Increment coins by 10 for watching
             localStorage.setItem('coins', coins);
             document.getElementById('coinCount').textContent = coins; // Update displayed coin count
             window.location.href = nextVideoPage;
@@ -112,9 +112,19 @@
             if (currentTime - lastYouTubeClick < 1800000) {
                 showNotification('You need to wait for 30 minutes before watching another video.');
             } else {
-                // Update the last click time and redirect to YouTube page
+                // Update the last click time
                 localStorage.setItem('lastYouTubeClick', currentTime);
-                window.location.href = 'youtubepage2.html'; // Replace with your actual YouTube page
+
+                // Determine which YouTube page to open
+                let youtubePageIndex = parseInt(localStorage.getItem('youtubePageIndex')) || 0;
+                const youtubePages = ['youtubepage.html', 'youtubepage2.html'];
+
+                // Open the current YouTube page
+                window.location.href = youtubePages[youtubePageIndex];
+
+                // Alternate the index for next click
+                youtubePageIndex = (youtubePageIndex + 1) % youtubePages.length;
+                localStorage.setItem('youtubePageIndex', youtubePageIndex);
             }
         });
 
