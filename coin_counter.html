@@ -15,50 +15,49 @@
             margin: 0;
             position: relative;
             background-image: url('coin_page_background.avif');
-            background-size: cover; /* Ensures the image covers the entire area */
-            background-position: center; /* Centers the image */
-            color: white; /* Optional: Changes text color for better contrast */
+            background-size: cover;
+            background-position: center;
+            color: white;
         }
         #coinCounter {
             position: absolute;
             top: 20px;
             right: 20px;
-            background-color: rgba(0, 0, 0, 0.7); /* Darker background for better readability */
+            background-color: rgba(0, 0, 0, 0.7);
             padding: 10px;
             border-radius: 5px;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
             font-size: 24px;
-            display: flex; /* Use flexbox to align items */
-            align-items: center; /* Center vertically */
+            display: flex;
+            align-items: center;
         }
         #coinImage {
-            width: 24px; /* Set a width for the image */
-            height: auto; /* Maintain aspect ratio */
-            margin-right: 8px; /* Space between image and text */
-            vertical-align: middle; /* Aligns the image with the text */
+            width: 24px;
+            height: auto;
+            margin-right: 8px;
+            vertical-align: middle;
         }
         #watchButton, #youtubeButton, #gpayButton {
-            width: 300px; /* Set a fixed width for both buttons */
+            width: 300px;
             margin-top: 30px;
             padding: 20px 20px;
             font-size: 16px;
             cursor: pointer;
-            transition: background-color 0.3s, color 0.3s; /* Added transition for text color */
-            background-color: rgba(128, 0, 128, 0.8); /* A purplish-pink background */
-            color: white; /* White text for contrast */
-            border: none; /* Remove default button border */
-            border-radius: 5px; /* Round button corners */
-            vertical-align: middle; /* Align button text and images */
+            transition: background-color 0.3s, color 0.3s;
+            background-color: rgba(128, 0, 128, 0.8);
+            color: white;
+            border: none;
+            border-radius: 5px;
         }
         #watchButton:hover, #youtubeButton:hover, #gpayButton:hover {
-            background-color: rgba(75, 0, 130, 0.9); /* A deeper purple on hover */
-            color: #fff; /* Keep the text white */
+            background-color: rgba(75, 0, 130, 0.9);
+            color: #fff;
         }
         #gpayImage {
-            width: 16px; /* Set a width for the image */
-            height: auto; /* Maintain aspect ratio */
-            margin-right: 8px; /* Space between image and text */
-            vertical-align: middle; /* Aligns the image with the text */
+            width: 16px;
+            height: auto;
+            margin-right: 8px;
+            vertical-align: middle;
         }
         #notification {
             margin-top: 10px;
@@ -74,10 +73,7 @@
         Coins: <span id="coinCount">0</span>
     </div>
     <button id="watchButton" aria-label="Watch and Earn">Watch and Earn</button>
-
-    <!-- New YouTube button added here -->
     <button id="youtubeButton" aria-label="Watch YouTube and Earn">Watch YouTube and Earn</button>
-
     <button id="gpayButton" aria-label="GPay: 100 Coins = 2 Rupees">
         <img src="gpay_pic.png" alt="GPay" id="gpayImage" />
         GPay: 100 Coins = 2 Rupees
@@ -106,7 +102,17 @@
 
         // YouTube button click event
         document.getElementById('youtubeButton').addEventListener('click', function() {
-            window.location.href = 'youtubepage2.html';
+            const lastYouTubeClick = parseInt(localStorage.getItem('lastYouTubeClick')) || 0;
+            const currentTime = Date.now();
+
+            // Check if 1 minute (60000 ms) has passed
+            if (currentTime - lastYouTubeClick < 60000) {
+                showNotification('You need to wait for 1 minute before watching another video.');
+            } else {
+                // Update the last click time and redirect to YouTube page
+                localStorage.setItem('lastYouTubeClick', currentTime);
+                window.location.href = 'youtubepage2.html'; // Replace with your actual YouTube page
+            }
         });
 
         // GPay button click event
@@ -134,4 +140,3 @@
 
 </body>
 </html>
-
