@@ -97,7 +97,7 @@
         // Redirect to video page when "Watch and Earn" button is clicked
         document.getElementById('watchButton').addEventListener('click', function() {
             const nextVideoPage = getNextVideoPage();
-            coins += 10; // Increment coins by 10 for watching
+            coins += 0; // Increment coins by 10 for watching
             localStorage.setItem('coins', coins);
             document.getElementById('coinCount').textContent = coins; // Update displayed coin count
             window.location.href = nextVideoPage;
