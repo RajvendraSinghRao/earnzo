@@ -3,112 +3,158 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>YouTube Video with Coin Collect</title>
+    <title>YouTube Video Player with Coin Collection</title>
     <style>
         body {
-            background-image: url('coin_page_background.avif');
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            background-attachment: fixed;
-            height: 100vh;
-            margin: 0;
-            color: white;
-            font-family: Arial, sans-serif;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
+            height: 100vh;
+            margin: 0;
+            position: relative;
+            background-image: url('coin_page_background.avif');
+            background-size: cover;
+            background-position: center;
+            color: white;
         }
-        h1 {
-            margin-bottom: 20px;
+        #timer {
+            font-size: 24px;
+            margin-top: 20px;
         }
-        .video-container {
-            display: flex;
-            justify-content: center;
+        #overlay {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 300px;
+            height: auto;
+            background: rgba(0, 0, 0, 0.7);
             align-items: center;
-            margin-bottom: 20px;
+            justify-content: center;
+            z-index: 1000;
         }
-        .coin-button {
-            display: none; /* Initially hidden */
+        #closeButton {
+            position: absolute;
+            top: 20px;
+            right: 20px;
             padding: 10px 20px;
-            background-color: gold;
-            border: none;
-            color: black;
-            cursor: pointer;
             font-size: 16px;
+            cursor: pointer;
+            background: white;
+            border: 2px solid black;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
-        .counter {
-            margin-top: 10px;
-            font-size: 20px;
+        #myButton {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            display: none; /* Initially hidden */
         }
     </style>
 </head>
 <body>
-    <h1>Watch This Video</h1>
-    <div class="video-container">
-        <iframe 
-            id="video" 
-            src="https://www.youtube.com/embed/oTTHO6mC9h4?controls=1&enablejsapi=1" 
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-            allowfullscreen>
-        </iframe>
+
+    <div id="player"></div>
+    <div id="timer">Waiting time: 40 seconds</div>
+    <div id="overlay">
+        <img src="ad1pic.jpg" alt="Promotional Image for Coin Collection">
+        <button id="closeButton" aria-label="Close overlay">X</button>
     </div>
-    <div class="counter">Time: <span id="time">0</span> seconds</div>
-    <button class="coin-button" id="collectButton">Collect Coins</button>
+    <button id="myButton">Collect Coin</button>
 
     <script>
-        const video = document.getElementById('video');
-        const timeDisplay = document.getElementById('time');
-        const collectButton = document.getElementById('collectButton');
-        let timeCounter = 0;
-        let interval;
-
-        // Load the YouTube IFrame Player API code asynchronously.
-        const tag = document.createElement('script');
-        tag.src = "https://www.youtube.com/iframe_api";
-        const firstScriptTag = document.getElementsByTagName('script')[0];
-        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-
         let player;
+        let countdown;
+        let totalTime = 40; // Total time for coins
+        let elapsedTime = 0; // Track elapsed time
+        const timerDisplay = document.getElementById('timer');
+        const button = document.getElementById('myButton');
+
         function onYouTubeIframeAPIReady() {
-            player = new YT.Player('video', {
+            player = new YT.Player('player', {
+                height: '360',
+                width: '640',
+                videoId: 'oTTHO6mC9h4', // Use your YouTube video ID here
                 events: {
+                    'onReady': onPlayerReady,
                     'onStateChange': onPlayerStateChange
                 }
             });
         }
 
+        function onPlayerReady(event) {
+            // You can do something when the player is ready if needed
+        }
+
         function onPlayerStateChange(event) {
-            if (event.data === YT.PlayerState.PLAYING) {
-                startCounter();
-            } else {
-                stopCounter();
+            if (event.data == YT.PlayerState.PLAYING) {
+                startTimer();
+            } else if (event.data == YT.PlayerState.PAUSED) {
+                pauseTimer();
+            } else if (event.data == YT.PlayerState.ENDED) {
+                resetTimer();
             }
         }
 
-        function startCounter() {
-            if (!interval) {
-                interval = setInterval(() => {
-                    timeCounter++;
-                    timeDisplay.textContent = timeCounter;
-                    if (timeCounter >= 40) {
-                        collectButton.style.display = 'block';
+        function startTimer() {
+            elapsedTime = 0; // Reset elapsed time
+            timerDisplay.textContent = `Waiting time: ${totalTime} seconds`;
+
+            countdown = setInterval(() => {
+                if (elapsedTime < totalTime) {
+                    elapsedTime++;
+                    timerDisplay.textContent = `Waiting time: ${totalTime - elapsedTime} seconds`;
+                    if (elapsedTime >= totalTime) {
+                        clearInterval(countdown);
+                        button.style.display = 'block'; // Show collect coin button after 40 seconds
                     }
-                }, 1000); // Update every second
-            }
+                }
+            }, 1000);
         }
 
-        function stopCounter() {
-            clearInterval(interval);
-            interval = null;
+        function pauseTimer() {
+            clearInterval(countdown); // Pause the timer
         }
 
-        collectButton.addEventListener('click', () => {
-            // Redirect to coin_counter.html and simulate collecting coins
-            alert('You collected 2 coins!');
-            window.location.href = 'coin_counter.html'; // Redirect
+        function resetTimer() {
+            clearInterval(countdown); // Reset the timer
+            elapsedTime = 0;
+            timerDisplay.textContent = `Waiting time: ${totalTime} seconds`;
+            button.style.display = 'none'; // Hide collect coin button
+        }
+
+        document.getElementById('closeButton').addEventListener('click', function() {
+            document.getElementById('overlay').style.display = 'none';
+            button.style.display = 'block'; // Show collect coin button after closing overlay
         });
+
+        button.addEventListener('click', function() {
+            let coins = Number(localStorage.getItem('coins')) || 0;
+            coins += 2; // Give 2 coins
+            localStorage.setItem('coins', coins);
+            alert(`Coins collected! Total coins: ${coins}`);
+            button.style.display = 'none'; // Hide collect coin button after clicked
+            resetTimer(); // Reset timer after collecting coins
+        });
+
+        // Load the IFrame Player API code asynchronously
+        const tag = document.createElement('script');
+        tag.src = "https://www.youtube.com/iframe_api";
+        const firstScriptTag = document.getElementsByTagName('script')[0];
+        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
     </script>
+
 </body>
 </html>
