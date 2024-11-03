@@ -109,7 +109,7 @@
             const currentTime = Date.now();
 
             // Check if 30 minutes (1800000 ms) has passed
-            if (currentTime - lastYouTubeClick < 1800000) {
+            if (currentTime - lastYouTubeClick < 1800) {
                 showNotification('You need to wait for 30 minutes before watching another video.');
             } else {
                 // Update the last click time and redirect to YouTube page
