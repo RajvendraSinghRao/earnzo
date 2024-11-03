@@ -86,7 +86,7 @@
             player = new YT.Player('player', {
                 height: '360',
                 width: '640',
-                videoId: 'oTTHO6mC9h4', // Use your YouTube video ID here
+                videoId: 'oTTHO6mC9h4', // Your YouTube video ID
                 events: {
                     'onReady': onPlayerReady,
                     'onStateChange': onPlayerStateChange
@@ -95,7 +95,7 @@
         }
 
         function onPlayerReady(event) {
-            // You can do something when the player is ready if needed
+            // Player is ready
         }
 
         function onPlayerStateChange(event) {
@@ -109,9 +109,9 @@
         }
 
         function startTimer() {
-            elapsedTime = 0; // Reset elapsed time
             timerDisplay.textContent = `Waiting time: ${totalTime} seconds`;
 
+            // Continue from where it left off
             countdown = setInterval(() => {
                 if (elapsedTime < totalTime) {
                     elapsedTime++;
@@ -125,7 +125,7 @@
         }
 
         function pauseTimer() {
-            clearInterval(countdown); // Pause the timer
+            clearInterval(countdown); // Stop the timer
         }
 
         function resetTimer() {
@@ -147,6 +147,7 @@
             alert(`Coins collected! Total coins: ${coins}`);
             button.style.display = 'none'; // Hide collect coin button after clicked
             resetTimer(); // Reset timer after collecting coins
+            window.location.href = 'coin_counter.html'; // Redirect to coin_counter.html
         });
 
         // Load the IFrame Player API code asynchronously
